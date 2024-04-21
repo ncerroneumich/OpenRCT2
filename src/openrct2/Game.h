@@ -18,79 +18,100 @@
 class Intent;
 struct ParkLoadResult;
 
-struct RealTimeTicks
+template <typename T, typename Tag>
+struct GameTicks
 {
-    using ValueType = std::uint32_t;
+    using ValueType = T;
 
     ValueType Value;
 
-    constexpr void operator=(uint32_t rhs)
+    static constexpr GameTicks FromSeconds(uint32_t seconds)
+    {
+        GameTicks<T, Tag> result;
+        result.Value = seconds * kGameUpdateTimeMS * 1000;
+        return result;
+    }
+    static constexpr GameTicks FromMilliseconds(uint32_t milliseconds)
+    {
+        GameTicks<T, Tag> result;
+        result.Value = milliseconds * kGameUpdateTimeMS;
+        return result;
+    }
+
+    constexpr void operator=(T rhs)
     {
         Value = rhs;
     }
 
-    constexpr RealTimeTicks& operator++()
+    constexpr GameTicks& operator++()
     {
         ++Value;
         return *this;
     }
-    constexpr RealTimeTicks& operator--()
+    constexpr GameTicks& operator--()
     {
         --Value;
         return *this;
     }
 
-    constexpr RealTimeTicks operator+(RealTimeTicks rhs) const
+    constexpr GameTicks operator+(GameTicks rhs) const
     {
-        return RealTimeTicks(Value + rhs.Value);
+        return GameTicks(Value + rhs.Value);
     }
-    constexpr RealTimeTicks operator-(RealTimeTicks rhs) const
+    constexpr GameTicks operator-(GameTicks rhs) const
     {
-        return RealTimeTicks(Value - rhs.Value);
+        return GameTicks(Value - rhs.Value);
     }
-    constexpr RealTimeTicks operator*(RealTimeTicks rhs) const
+    constexpr GameTicks operator*(GameTicks rhs) const
     {
-        return RealTimeTicks(Value * rhs.Value);
+        return GameTicks(Value * rhs.Value);
     }
-    constexpr RealTimeTicks operator/(RealTimeTicks rhs) const
+    constexpr GameTicks operator/(GameTicks rhs) const
     {
-        return RealTimeTicks(Value / rhs.Value);
+        return GameTicks(Value / rhs.GameTicks);
     }
 
-    constexpr RealTimeTicks& operator+=(RealTimeTicks rhs)
+    constexpr GameTicks& operator+=(GameTicks rhs)
     {
         Value += rhs.Value;
         return *this;
     }
-    constexpr RealTimeTicks& operator-=(RealTimeTicks rhs)
+    constexpr GameTicks& operator-=(GameTicks rhs)
     {
         Value -= rhs.Value;
         return *this;
     }
 
-    constexpr bool operator==(const RealTimeTicks& rhs)
+    constexpr bool operator==(const GameTicks& rhs)
     {
         return Value == rhs.Value;
     }
-    constexpr bool operator<(const RealTimeTicks& rhs)
+    constexpr bool operator<(const GameTicks& rhs)
     {
         return Value < rhs.Value;
     }
-    constexpr bool operator>(const RealTimeTicks& rhs)
+    constexpr bool operator>(const GameTicks& rhs)
     {
         return Value > rhs.Value;
     }
-    constexpr bool operator<=(const RealTimeTicks& rhs)
+    constexpr bool operator<=(const GameTicks& rhs)
     {
         return Value <= rhs.Value;
     }
-    constexpr bool operator>=(const RealTimeTicks& rhs)
+    constexpr bool operator>=(const GameTicks& rhs)
     {
         return Value >= rhs.Value;
     }
-    constexpr bool operator!=(const RealTimeTicks& rhs)
+    constexpr bool operator!=(const GameTicks& rhs)
     {
         return Value != rhs.Value;
+    }
+
+    constexpr GameTicks& operator%(const GameTicks& rhs)
+    {
+        GameTicks result;
+        result.Value = Value % rhs.Value;
+        return result;
     }
 };
 

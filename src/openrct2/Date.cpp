@@ -162,5 +162,5 @@ void ResetDate()
 {
     auto& gameState = GetGameState();
     gameState.Date = {};
-    gCurrentRealTimeTicks = 0;
+    gCurrentRealTimeTicks = RealTimeTicks(0);
 }
