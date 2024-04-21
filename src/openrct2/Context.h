@@ -175,6 +175,8 @@ namespace
 {
     // The number of logical update / ticks per second.
     constexpr uint32_t kGameUpdateFPS = 40;
+    // The number of logical update / ticks per milliseconds.
+    constexpr float kGameUpdateFPMS = kGameUpdateFPS / 1000.0f;
     // The maximum amount of updates in case rendering is slower
     constexpr uint32_t kGameMaxUpdates = 4;
     // The game update interval in milliseconds, (1000 / 40fps) = 25ms
@@ -182,7 +184,6 @@ namespace
     // The maximum threshold to advance.
     constexpr float kGameUpdateMaxThreshold = kGameUpdateTimeMS * kGameMaxUpdates;
 }; // namespace
-
 constexpr float kGameMinTimeScale = 0.1f;
 constexpr float kGameMaxTimeScale = 5.0f;
 

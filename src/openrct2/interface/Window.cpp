@@ -136,9 +136,11 @@ void WindowUpdateAll()
     WindowFlushDead();
 
     // Periodic update happens every second so 40 ticks.
-    if (gCurrentRealTimeTicks >= gWindowUpdateTicks)
+    // TODO: Update these lines once gWindowUpdateTicks is
+    //       converted its own type.
+    if (gCurrentRealTimeTicks >= RealTimeTicks(gWindowUpdateTicks))
     {
-        gWindowUpdateTicks = gCurrentRealTimeTicks + kGameUpdateFPS;
+        gWindowUpdateTicks = gCurrentRealTimeTicks.Value + kGameUpdateFPS;
 
         WindowVisitEach([](WindowBase* w) { w->OnPeriodicUpdate(); });
     }

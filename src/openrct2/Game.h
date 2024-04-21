@@ -18,6 +18,16 @@
 class Intent;
 struct ParkLoadResult;
 
+namespace TickConversion {
+    // TODO: Remove these constants or move
+    //       them to a more appropriate place 
+    //       after figuring out if we can access
+    //       the constants from Context.h here
+    constexpr uint32_t kGameUpdateFPS = 40;
+    constexpr float kGameUpdateFPMS =  static_cast<float>(kGameUpdateFPS) / 1000.0f;
+} // namespace TickConversion
+
+
 template <typename T, typename Tag>
 struct GameTicks
 {
@@ -28,13 +38,13 @@ struct GameTicks
     static constexpr GameTicks FromSeconds(uint32_t seconds)
     {
         GameTicks<T, Tag> result;
-        result.Value = seconds * kGameUpdateTimeMS * 1000;
+        result.Value = seconds * TickConversion::kGameUpdateFPS;
         return result;
     }
     static constexpr GameTicks FromMilliseconds(uint32_t milliseconds)
     {
         GameTicks<T, Tag> result;
-        result.Value = milliseconds * kGameUpdateTimeMS;
+        result.Value = milliseconds * TickConversion::kGameUpdateFPMS;
         return result;
     }
 
@@ -48,10 +58,22 @@ struct GameTicks
         ++Value;
         return *this;
     }
+    constexpr GameTicks operator++(int)
+    {
+        GameTicks<T, Tag> temp = *this;
+        Value++;
+        return temp;
+    }
     constexpr GameTicks& operator--()
     {
         --Value;
         return *this;
+    }
+    constexpr GameTicks operator--(int)
+    {
+        GameTicks<T, Tag> temp = *this;
+        Value--;
+        return temp;
     }
 
     constexpr GameTicks operator+(GameTicks rhs) const
@@ -114,6 +136,10 @@ struct GameTicks
         return result;
     }
 };
+
+struct RealTimeTag;
+
+using RealTimeTicks = GameTicks<uint32_t, RealTimeTag>;
 
 enum class GameCommand : int32_t
 {
@@ -232,7 +258,7 @@ enum
     ERROR_TYPE_FILE_LOAD = 255
 };
 
-extern uint32_t gCurrentRealTimeTicks;
+extern RealTimeTicks gCurrentRealTimeTicks;
 
 extern uint16_t gCurrentDeltaTime;
 extern uint8_t gGamePaused;

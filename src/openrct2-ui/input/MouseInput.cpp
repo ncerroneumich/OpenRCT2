@@ -1520,7 +1520,7 @@ static void InputUpdateTooltip(WindowBase* w, WidgetIndex widgetIndex, const Scr
     {
         if (gTooltipCursor == screenCoords)
         {
-            if (gCurrentRealTimeTicks >= _tooltipNotShownTimeout && w != nullptr && WidgetIsVisible(*w, widgetIndex))
+            if (gCurrentRealTimeTicks.Value >= _tooltipNotShownTimeout && w != nullptr && WidgetIsVisible(*w, widgetIndex))
             {
                 gTooltipCloseTimeout = gCurrentRealTimeTicks + 8000;
                 WindowTooltipOpen(w, widgetIndex, screenCoords);
@@ -1531,7 +1531,7 @@ static void InputUpdateTooltip(WindowBase* w, WidgetIndex widgetIndex, const Scr
             ResetTooltipNotShown();
         }
 
-        gTooltipCloseTimeout = gCurrentRealTimeTicks + 8000;
+        gTooltipCloseTimeout = gCurrentRealTimeTicks + RealTimeTicks(8000);
         gTooltipCursor = screenCoords;
     }
     else

@@ -76,7 +76,7 @@ InputState InputGetState()
 
 void ResetTooltipNotShown()
 {
-    _tooltipNotShownTimeout = gCurrentRealTimeTicks + 50;
+    _tooltipNotShownTimeout = (gCurrentRealTimeTicks + RealTimeTicks(50)).Value;
 }
 
 void InputResetPlaceObjModifier()

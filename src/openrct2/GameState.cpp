@@ -226,7 +226,7 @@ namespace OpenRCT2
             // the flickering frequency is reduced by 4, compared to the original
             // it was done due to inability to reproduce original frequency
             // and decision that the original one looks too fast
-            if (gCurrentRealTimeTicks % 4 == 0)
+            if (gCurrentRealTimeTicks % RealTimeTicks(4) == RealTimeTicks(0))
                 gWindowMapFlashingFlags ^= MapFlashingFlags::SwitchColour;
 
             // Handle guest map flashing
